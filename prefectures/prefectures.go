@@ -1,6 +1,6 @@
 package prefectures
 
-var prefectures = [47]string{
+var Prefectures = [47]string{
 	"hokkaido",
 	"aomori",
 	"iwate",
