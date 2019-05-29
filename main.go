@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"wite-postgresql/prefectures"
 
@@ -16,8 +15,14 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// create Table
 	for _, pre := range prefectures.Prefectures {
-		fmt.Println(pre)
 		db.Exec(`create table ` + pre + `(deviValue integer, schoolName text, url text)`)
 	}
+
+	// delete Table
+	//for _, pre := range prefectures.Prefectures {
+	//	db.Exec(`drop table ` + pre)
+	//}
+
 }
