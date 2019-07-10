@@ -20,10 +20,6 @@ type info struct {
 	Prefecture string `json:"prefecture"`
 }
 
-func (info *info) Migrate(db *gorm.DB) {
-	db.AutoMigrate(info)
-}
-
 func (info *info) WriteCSV(db *gorm.DB) {
 	count := 0
 	files, err := ioutil.ReadDir("csv-name-url/")
