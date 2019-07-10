@@ -8,7 +8,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-func create(db *gorm.DB) {
+func createTable(db *gorm.DB) {
 	// create Table
 	for _, pre := range prefectures.Prefectures {
 		db.Exec(`create table ` + pre + `(deviValue integer, schoolName text, course text, url text)`)
@@ -29,9 +29,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	pre := info{}
 
-	create(db)
+	//db.AutoMigrate(&pre)
 
-	deleteDB(db)
+	//pre.SchoolName = "sdfafsad"
+	//db.Create(&pre)
+
+	db.First(&pre)
+	db.Delete(&pre)
+
+	//createTable(db)
+	//deleteDB(db)
 
 }
