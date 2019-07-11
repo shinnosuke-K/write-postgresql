@@ -12,15 +12,16 @@ import (
 )
 
 type info struct {
-	ID         int
-	Deviation  string
-	SchoolName string
-	Course     string
-	URL        string
-	Prefecture string
+	ID         int    `json:"id"`
+	Deviation  string `json:"deviation"`
+	SchoolName string `json:"school_name"`
+	Course     string `json:"course"`
+	URL        string `json:"url"`
+	Prefecture string `json:"prefecture"`
 }
 
 func (info *info) WriteCSV(db *gorm.DB) {
+	count := 1
 	files, err := ioutil.ReadDir("csv-name-url/")
 	if err != nil {
 		log.Fatal(err)
@@ -39,6 +40,8 @@ func (info *info) WriteCSV(db *gorm.DB) {
 				if err != nil {
 					break
 				}
+				info.ID = count
+				count++
 				info.Deviation = line[0]
 				info.SchoolName = line[1]
 				info.Course = line[2]
@@ -59,7 +62,7 @@ func main() {
 	}
 
 	// Instantiate(Singular)
-	//pre := info{}
+	pre := info{}
 
 	// Instantiate(Multiple)
 	//pre := []info{}
@@ -74,7 +77,7 @@ func main() {
 	//db.DropTable(&pre)
 
 	// Select(Singular)
-	//pre.SchoolID = 355
+	//pre.ID = 355
 	//fmt.Println(pre)
 	//db.First(&pre)
 	//fmt.Println(pre)
