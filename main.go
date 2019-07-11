@@ -1,25 +1,57 @@
 package main
 
 import (
+	"encoding/csv"
+	"io/ioutil"
 	"log"
-	"write-postgresql/prefectures"
+	"os"
+	"strings"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-func createTable(db *gorm.DB) {
-	// create Table
-	for _, pre := range prefectures.Prefectures {
-		db.Exec(`create table ` + pre + `(deviValue integer, schoolName text, course text, url text)`)
-	}
+type info struct {
+	SchoolID   int    `json sql:AUTO_INCREMENT`
+	Deviation  string `json:"deviation"`
+	SchoolName string `json:"school_name"`
+	Course     string `json:"course"`
+	URL        string `json:"url"`
+	Prefecture string `json:"prefecture"`
 }
 
-func deleteDB(db *gorm.DB) {
-	//delete Table
-	for _, pre := range prefectures.Prefectures {
-		//db.Exec(`drop table ` + pre)
-		db.DropTable(pre)
+func (info *info) WriteCSV(db *gorm.DB) {
+	count := 0
+	files, err := ioutil.ReadDir("csv-name-url/")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, file := range files {
+		if fileName := file.Name(); fileName != ".DS_Store" {
+			csvFile, err := os.Open("csv-name-url/" + fileName)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			reader := csv.NewReader(csvFile)
+
+			for {
+				line, err := reader.Read()
+				if err != nil {
+					break
+				}
+
+				info.SchoolID = count
+				count++
+				info.Deviation = line[0]
+				info.SchoolName = line[1]
+				info.Course = line[2]
+				info.URL = line[3]
+				info.Prefecture = strings.Replace(fileName, ".csv", "", 1)
+
+				db.Create(&info)
+			}
+		}
 	}
 }
 
@@ -29,17 +61,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Instantiate
 	pre := info{}
 
-	//db.AutoMigrate(&pre)
+	// Write csv to DB
+	//pre.WriteCSV(db)
 
-	//pre.SchoolName = "sdfafsad"
-	//db.Create(&pre)
+	// Create Table
+	db.CreateTable(&pre)
 
-	db.First(&pre)
-	db.Delete(&pre)
-
-	//createTable(db)
-	//deleteDB(db)
+	// Delete Table
+	//db.DropTable(&pre)
 
 }
