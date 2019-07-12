@@ -62,10 +62,10 @@ func main() {
 	}
 
 	// Instantiate(Singular)
-	pre := info{}
+	//pre := info{}
 
 	// Instantiate(Multiple)
-	//pre := []info{}
+	pre := []info{}
 
 	// Create Table
 	//db.CreateTable(&pre)
@@ -77,11 +77,12 @@ func main() {
 	//db.DropTable(&pre)
 
 	// Select(Singular)
-	//pre.ID = 355
+	//pre.ID = 6
 	//fmt.Println(pre)
 	//db.First(&pre)
 	//fmt.Println(pre)
 
 	// Select(multiple)
-
+	//db.Find(&pre, "prefecture=? and deviation=?", "aichi", 73)
+	//fmt.Println(pre)
 }
